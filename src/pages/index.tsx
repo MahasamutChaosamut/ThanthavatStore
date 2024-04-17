@@ -1,16 +1,16 @@
-import { useEffect } from 'react';
-import Head from 'next/head';
-import Layout from 'containers/layout/layout';
-import HeroBlock from 'containers/hero-block';
-import Products from 'containers/products';
-import CallToAction from 'containers/call-to-action';
-import HowItWorks from 'containers/how-it-works';
-import { useRefScroll } from 'helpers/use-ref-scroll';
-import { useSearch } from 'contexts/search/use-search';
-import { getProducts } from 'helpers/get-products';
-import { getCategories } from 'helpers/get-categories';
-import Categories from 'containers/categories';
-import { useCategory } from 'contexts/category/use-category';
+import { useEffect } from "react";
+import Head from "next/head";
+import Layout from "containers/layout/layout";
+import HeroBlock from "containers/hero-block";
+import Products from "containers/products";
+import CallToAction from "containers/call-to-action";
+import HowItWorks from "containers/how-it-works";
+import { useRefScroll } from "helpers/use-ref-scroll";
+import { useSearch } from "contexts/search/use-search";
+import { getProducts } from "helpers/get-products";
+import { getCategories } from "helpers/get-categories";
+import Categories from "containers/categories";
+import { useCategory } from "contexts/category/use-category";
 
 export default function Home({ products, categories }) {
   const { elRef, scroll } = useRefScroll({
@@ -19,10 +19,15 @@ export default function Home({ products, categories }) {
     offsetPX: -100,
   });
   const { searchTerm } = useSearch();
-  const { category } = useCategory();
+  const { category, setCategory } = useCategory();
   useEffect(() => {
+    console.log(category);
     if (searchTerm || category) return scroll();
   }, [searchTerm, category, scroll]);
+
+  useEffect(() => {
+    setCategory(categories);
+  }, []);
 
   return (
     <Layout>
@@ -39,7 +44,7 @@ export default function Home({ products, categories }) {
       <HowItWorks />
       <Categories data={categories} ref={elRef} />
       <Products items={products} />
-      
+
       <CallToAction />
     </Layout>
   );

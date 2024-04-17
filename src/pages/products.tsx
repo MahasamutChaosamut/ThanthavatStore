@@ -1,29 +1,35 @@
-import { useState } from 'react';
-import Head from 'next/head';
-import Layout from 'containers/layout/layout';
-import Product from 'containers/products';
-import { useCategory } from 'contexts/category/use-category';
-import Button from 'components/button';
-import { getProducts } from 'helpers/get-products';
+import { useState } from "react";
+import Head from "next/head";
+import Layout from "containers/layout/layout";
+import Product from "containers/products";
+import { useCategory } from "contexts/category/use-category";
+import Button from "components/button";
+import { getProducts } from "helpers/get-products";
 
 export default function Products({ product }) {
-  const uniqueTypes = [...new Set(product.map(item => item.type))];
+  const uniqueTypes = [...new Set(product.map((item) => item.type))];
   const [filteredProducts, setProducts] = useState();
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedType, setSelectedType] = useState("");
 
   const { category, setCategory } = useCategory();
-  setCategory('');
+  // setCategory('');
 
   const handleTypeSelect = (type) => {
-    const filteredProducts = product.filter(x => x.type === type);
+    const filteredProducts = product.filter((x) => x.type === type);
     setProducts(filteredProducts);
     setSelectedType(type);
   };
   const handleclearSelect = () => {
     const filteredProducts = product;
     setProducts(filteredProducts);
-    setCategory('');
-    setSelectedType('');
+    // setCategory("");
+    setSelectedType("");
+  };
+
+  const handleCategorySelect = (id) => {
+    // const filteredProducts = product.filter((x) => x.category_ids == id);
+    // setProducts(product);
+    // setSelectedType(type);
   };
 
   return (
@@ -36,24 +42,53 @@ export default function Products({ product }) {
         <meta name="Description" content="Put your description here." />
         <title>สินค้า</title>
       </Head>
-      <div style={{ display: 'flex', padding: 30 }}>
-        <div style={{ flexDirection: 'column', width: '300px', height: '400px', wordWrap: 'break-word', padding: 40, border: '1px solid #ccc', borderRadius: '5px', marginRight: '40px' }}>
-          {uniqueTypes.map((type, index) => (
+      <div style={{ display: "flex", padding: 30 }}>
+        <div
+          style={{
+            flexDirection: "column",
+            width: "300px",
+            height: "400px",
+            wordWrap: "break-word",
+            padding: 40,
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            marginRight: "40px",
+          }}
+        >
+          {/* {uniqueTypes.map((type, index) => (
             <div key={index}>
               <button
                 onClick={() => handleTypeSelect(type)}
-                className='selected'
+                className="selected"
               >
-                {selectedType === type ? '✓ ' : ''}
+                {selectedType === type ? "✓ " : ""}
                 {type as React.ReactNode}
               </button>
             </div>
-          ))}
-          <Button className="big w-full" style={{marginTop:20}} onClick={() => handleclearSelect()}>
+          ))} */}
+          {category?.map((c, i) => {
+            return (
+              <div key={i}>
+                <button
+                  onClick={() => handleCategorySelect(c.id)}
+                  className="selected"
+                >
+                  {c.name}
+                </button>
+              </div>
+            );
+          })}
+          <Button
+            className="big w-full"
+            style={{ marginTop: 20 }}
+            onClick={() => handleclearSelect()}
+          >
             ล้างตัวเลือก
           </Button>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", width: "100%" }}
+        >
           <h1>รายการสินค้า</h1>
           <Product items={filteredProducts || product} />
         </div>
@@ -64,7 +99,7 @@ export default function Products({ product }) {
         }
 
         .selected:hover {
-          color: #797db7; 
+          color: #797db7;
         }
       `}</style>
     </Layout>
