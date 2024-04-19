@@ -5,32 +5,32 @@ import Product from "containers/products";
 import { useCategory } from "contexts/category/use-category";
 import Button from "components/button";
 import { getProducts } from "helpers/get-products";
+import { getCategories } from "helpers/get-categories";
 
-export default function Products({ product }) {
-  const uniqueTypes = [...new Set(product.map((item) => item.type))];
+export default function Products({ product, categories }) {
+  const uniqueTypes = [...new Set(product.map((item) => item))];
   const [filteredProducts, setProducts] = useState();
   const [selectedType, setSelectedType] = useState("");
-
   const { category, setCategory } = useCategory();
-  // setCategory('');
+  setCategory('');
 
-  const handleTypeSelect = (type) => {
-    const filteredProducts = product.filter((x) => x.type === type);
-    setProducts(filteredProducts);
-    setSelectedType(type);
-  };
   const handleclearSelect = () => {
-    const filteredProducts = product;
-    setProducts(filteredProducts);
-    // setCategory("");
+    const Products = product;
+    setProducts(Products);
     setSelectedType("");
+    setCategory('');
   };
-
   const handleCategorySelect = (id) => {
-    // const filteredProducts = product.filter((x) => x.category_ids == id);
-    // setProducts(product);
-    // setSelectedType(type);
+    const filteredProducts = product.filter((x) => x.category_ids.split(',')?.includes(id));
+    setProducts(filteredProducts);
+    console.log(filteredProducts);
+    if (category !== id) {
+      setCategory(id);
+    }
+    setSelectedType(id);
   };
+  console.log(category);
+  console.log(product);
 
   return (
     <Layout>
@@ -46,8 +46,7 @@ export default function Products({ product }) {
         <div
           style={{
             flexDirection: "column",
-            width: "300px",
-            height: "400px",
+            width: "350px",
             wordWrap: "break-word",
             padding: 40,
             border: "1px solid #ccc",
@@ -55,26 +54,23 @@ export default function Products({ product }) {
             marginRight: "40px",
           }}
         >
-          {/* {uniqueTypes.map((type, index) => (
-            <div key={index}>
-              <button
-                onClick={() => handleTypeSelect(type)}
-                className="selected"
-              >
-                {selectedType === type ? "✓ " : ""}
-                {type as React.ReactNode}
-              </button>
-            </div>
-          ))} */}
-          {category?.map((c, i) => {
+          <h1>ประเภทสินค้า</h1>
+          {categories?.map((c) => {
             return (
-              <div key={i}>
-                <button
-                  onClick={() => handleCategorySelect(c.id)}
-                  className="selected"
-                >
-                  {c.name}
-                </button>
+              <div key={c.id}>
+                {c.parent == 0 ? (
+                  <button onClick={() => handleCategorySelect(c.id)} className={`selected ${selectedType === c.id ? 'bold' : ''}`}>
+                    {selectedType === c.id ? "✓  " : ""}
+                    {c.name}
+                  </button>
+                ) : (
+                  <div style={{ marginLeft: 20 }}>
+                    <button onClick={() => handleCategorySelect(c.id)} className={`selected ${selectedType === c.id ? 'bold' : ''}`}>
+                      {selectedType === c.id ? "✓  " : ""}
+                      {c.name}
+                    </button>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -101,15 +97,21 @@ export default function Products({ product }) {
         .selected:hover {
           color: #797db7;
         }
+
+        .bold {
+          font-weight: bold;
+        }
       `}</style>
     </Layout>
   );
 }
 export async function getServerSideProps() {
   const product = await getProducts();
+  const categories = await getCategories();
   return {
     props: {
       product,
+      categories
     },
   };
 }

@@ -11,6 +11,7 @@ import { getProducts } from "helpers/get-products";
 import { getCategories } from "helpers/get-categories";
 import Categories from "containers/categories";
 import { useCategory } from "contexts/category/use-category";
+import { useProduct } from "contexts/category/use-product";
 
 export default function Home({ products, categories }) {
   const { elRef, scroll } = useRefScroll({
@@ -21,13 +22,9 @@ export default function Home({ products, categories }) {
   const { searchTerm } = useSearch();
   const { category, setCategory } = useCategory();
   useEffect(() => {
-    console.log(category);
     if (searchTerm || category) return scroll();
   }, [searchTerm, category, scroll]);
-
-  useEffect(() => {
-    setCategory(categories);
-  }, []);
+  
 
   return (
     <Layout>
@@ -44,7 +41,6 @@ export default function Home({ products, categories }) {
       <HowItWorks />
       <Categories data={categories} ref={elRef} />
       <Products items={products} />
-
       <CallToAction />
     </Layout>
   );

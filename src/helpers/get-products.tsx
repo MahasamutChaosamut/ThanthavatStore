@@ -3,7 +3,7 @@ export async function getProducts() {
     !(
       process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL &&
       process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY &&
-      process.env.GOOGLE_SPREADSHEET_ID_PRODUCT
+      process.env.GOOGLE_SPREADSHEET_ID_PRODUCT 
     )
   ) {
     throw new Error(

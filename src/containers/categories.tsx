@@ -52,6 +52,8 @@ const Categories = forwardRef(
           breakpoints={breakpoints}
         >
           {data?.map((current) => (
+            <div>
+              {current.parent == 0 && (
             <SwiperSlide key={current.id}>
               <CategoryCard
                 id={current.id}
@@ -59,6 +61,8 @@ const Categories = forwardRef(
                 name={current.name}
               />
             </SwiperSlide>
+            )}
+            </div>
           ))}
           <div className={ButtonGroupBase + ' ' + 'z-10'}>
             <button

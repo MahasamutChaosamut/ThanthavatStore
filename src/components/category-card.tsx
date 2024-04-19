@@ -23,7 +23,7 @@ export default function CategoryCard({
   return (
     <div
       className={`p-4 flex flex-col border rounded-md text-center ${
-        category === id ? 'border-gray-900' : ' border-gray-300'
+        category === id ? 'border-gray-900' : ' border-gray-0'
       }`}
       onClick={handleCategoryClick}
       role="button"

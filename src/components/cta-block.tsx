@@ -21,8 +21,9 @@ const CallToAction: React.FC<CallToActionProps> = ({
       className={classNames}
       style={{ 
         backgroundImage: `url(${background})`, 
-        width: 1800, 
-        height: 500, 
+        backgroundSize: 'cover',
+        aspectRatio: '3.66/1',
+        width: '100%', 
         border: '1px solid black', 
         boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.5)' 
       }}
